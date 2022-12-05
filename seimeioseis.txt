@@ -1,0 +1,6 @@
+null = 
+  we create the database table but it doesent need to fill it it can be empty
+blank =
+  we can submit the form with this value to ve empty
+auto_now_add = 
+  automaticaly when we make a project add the timestamp
