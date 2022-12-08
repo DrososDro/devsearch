@@ -1,40 +1,52 @@
-from django.shortcuts import render
-
-# Create your views here.
-projectslist = [
-    {
-        "id": "1",
-        "title": "Ecomerce Website",
-        "description": "Fully functional ecommerce website",
-    },
-    {
-        "id": "2",
-        "title": "Portofolio website",
-        "description": "This was a project where i build out my Portofolio",
-    },
-    {
-        "id": "3",
-        "title": "Social Network",
-        "description": "Awesome open source project I am still working",
-    },
-]
+from django.shortcuts import render, redirect
+from .models import Project
+from .forms import ProjectForm
 
 
 def projects(request):
-    page = "projects"
-    number = 5
-    context = {
-        "msg": page,
-        "number": number,
-        "projects": projectslist,
-    }
+    projects = Project.objects.all()
+    context = {"projects": projects}
     return render(request, "projects/projects.html", context)
 
 
 def project(request, pk):
-    projectobj = None
-    for i in projectslist:
-        if i["id"] == pk:
-            projectobj = i
+    projectobj = Project.objects.get(id=pk)
+    tag = projectobj.tags.all()
+    context = {
+        "obj": projectobj,
+        "tags": tag,
+    }
 
-    return render(request, "projects/single-project.html", {"obj": projectobj})
+    return render(request, "projects/single-project.html", context)
+
+
+def createProject(request):
+    form = ProjectForm()
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("projects")
+    context = {"form": form}
+    return render(request, "projects/project_form.html", context)
+
+
+def updateProject(request, pk):
+    project = Project.objects.get(id=pk)
+    form = ProjectForm(instance=project)
+    if request.method == "POST":
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect("projects")
+    context = {"form": form}
+    return render(request, "projects/project_form.html", context)
+
+
+def deleteProject(request, pk):
+    project = Project.objects.get(id=pk)
+    if request.method == "POST":
+        project.delete()
+        return redirect("projects")
+    context = {"object": project}
+    return render(request, "projects/delete_template.html", context)

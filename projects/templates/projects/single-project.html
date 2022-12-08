@@ -1,7 +1,9 @@
 <body>
-  {% extends 'main.html' %} {% block content %}
-  <h1>{{obj.title}}</h1>
-  <br />
-  <p>{{obj.description}}</p>
-  {% endblock content %} -->
+    {% extends 'main.html' %}
+    {% block content %}
+        <h1>{{ obj.title }}</h1>
+        <hr>
+        {% for tag in tags %}<span style="border:1px solid grey">{{ tag }}</span>{% endfor %}
+        <p>{{ obj.description }}</p>
+    {% endblock content %}
 </body>
