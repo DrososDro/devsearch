@@ -6,7 +6,6 @@ from django.dispatch import receiver
 
 # @receiver(post_save, sender=Profile)
 def create_profile(sender, instance, created, **kwargs):
-    print("trigger")
     if created:
         user = instance
         profile = Profile.objects.create(
