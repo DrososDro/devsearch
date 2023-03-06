@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileModelForm
 
 
 def login_user(request):
@@ -48,7 +49,7 @@ def register_user(request):
             user.save()
             login(request, user)
             messages.success(request, "User account was created!")
-            return redirect("profiles")
+            return redirect("edit-profile")
         else:
             messages.error(
                 request,
@@ -73,7 +74,6 @@ def profiles(request):
 def user_profile(request, pk):
     profile = Profile.objects.get(id=pk)
     top_skills = profile.skill_set.exclude(description__exact="")
-    print(top_skills)
     other_skills = profile.skill_set.filter(description="")
     context = {
         "user": profile,
@@ -81,3 +81,30 @@ def user_profile(request, pk):
         "otherSkills": other_skills,
     }
     return render(request, "users/user-profile.html", context)
+
+
+@login_required(login_url="login")
+def userAccount(request):
+    profile = request.user.profile
+    skills = profile.skill_set.all()
+    projects = profile.project_set.all()
+    context = {
+        "user": profile,
+        "skills": skills,
+        "projects": projects,
+    }
+    return render(request, "users/account.html", context)
+
+
+@login_required(login_url="login")
+def editAccount(request):
+
+    curent_user = request.user.profile
+    form = ProfileModelForm(instance=curent_user)
+    if request.method == "POST":
+        form = ProfileModelForm(request.POST, request.FILES, instance=curent_user)
+        if form.is_valid():
+            form.save()
+            return redirect("account")
+    context = {"user": form}
+    return render(request, "users/profile_form.html", context)
