@@ -64,6 +64,12 @@ def register_user(request):
 
 
 def profiles(request):
+    search_query = ""
+    if request.GET.get("search_query"):
+        search_query = request.GET.get("search_query")
+
+    print("search", search_query)
+
     profile = Profile.objects.all()
     context = {
         "users": profile,
@@ -98,7 +104,6 @@ def userAccount(request):
 
 @login_required(login_url="login")
 def editAccount(request):
-
     curent_user = request.user.profile
     form = ProfileModelForm(instance=curent_user)
     if request.method == "POST":
