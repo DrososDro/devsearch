@@ -10,13 +10,17 @@
                     </h2>
                 </div>
                 <div class="hero-section__search">
-                    <form class="form" action="#" method="get">
+                    <form class="form"
+                          id="searchForm"
+                          action="{% url 'projects' %}"
+                          method="get">
                         <div class="form__field">
                             <label for="formInput#search">Search By Projects</label>
                             <input class="input input--text"
                                    id="formInput#search"
-                                   name="text"
-                                   placeholder="Search by Project Title"/>
+                                   name="search_query"
+                                   value="{{ search_query }}"
+                                   placeholder="Search by Project Title" />
                         </div>
                         <input class="btn btn--sub btn--lg" type="submit" value="Search" />
                     </form>
@@ -33,7 +37,7 @@
                                 <a href="{% url 'project' project.id %}" class="project">
                                     <img class="project__thumbnail"
                                          src="{{ project.featured_image.url }}"
-                                         alt="project thumbnail"/>
+                                         alt="project thumbnail" />
                                     <div class="card__body">
                                         <h3 class="project__title">{{ project.title }}</h3>
                                         <p>
@@ -61,5 +65,6 @@
                 </div>
             </div>
         </section>
+        {% include "paginator.html" with queryset=projects custom_range=custom_range %}
     </main>
 {% endblock content %}

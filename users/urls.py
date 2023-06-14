@@ -9,4 +9,10 @@ urlpatterns = [
     path("profile/<str:pk>", views.user_profile, name="user-profile"),
     path("account", views.userAccount, name="account"),
     path("edit-account/", views.editAccount, name="edit-account"),
+    path("create-skill/", views.create_skill, name="create-skill"),
+    path("update-skill/<str:pk>", views.update_skill, name="update-skill"),
+    path("delete-skill/<str:pk>", views.delete_skill, name="delete-skill"),
+    path("inbox/", views.inbox, name="inbox"),
+    path("message/<str:pk>/", views.viewMessage, name="message"),
+    path("create-message/<str:pk>/", views.createMessage, name="create-message"),
 ]

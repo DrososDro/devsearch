@@ -35,12 +35,12 @@
             <div class="card">
                 <div class="auth__header text-center">
                     <a href="/">
-                        <img src="{% static 'images/icon.svg'  %}" alt="icon" />
+                        <img src="{% static 'images/icon.svg' %}" alt="icon" />
                     </a>
                     <h3>Account Login</h3>
                     <p>Hello Developer, Welcome Back!</p>
                 </div>
-                <form action="{% url 'login' %}" class="form auth__form" method="POST">
+                <form action="" class="form auth__form" method="POST">
                     {% csrf_token %}
                     <!-- Input:Email -->
                     <div class="form__field">
@@ -49,7 +49,7 @@
                                id="formInput#text"
                                type="text"
                                name="username"
-                               placeholder="Enter your username..."/>
+                               placeholder="Enter your username..." />
                     </div>
                     <!-- Input:Password -->
                     <div class="form__field">
@@ -58,7 +58,7 @@
                                id="formInput#passowrd"
                                type="password"
                                name="password"
-                               placeholder="••••••••"/>
+                               placeholder="••••••••" />
                     </div>
                     <div class="auth__actions">
                         <input class="btn btn--sub btn--lg" type="submit" value="Log In" />

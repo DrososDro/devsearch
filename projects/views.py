@@ -1,21 +1,41 @@
 from django.shortcuts import render, redirect
 from .models import Project
-from .forms import ProjectForm
+from .forms import ProjectForm, ReviewForm
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .utils import search_project, paginate_projects
 
 
 def projects(request):
-    projects = Project.objects.all()
-    context = {"projects": projects}
+    projects, search_query = search_project(request)
+    custom_range, projects = paginate_projects(request, projects, 6)
+    context = {
+        "projects": projects,
+        "search_query": search_query,
+        "custom_range": custom_range,
+    }
     return render(request, "projects/projects.html", context)
 
 
 def project(request, pk):
     projectobj = Project.objects.get(id=pk)
-    tag = projectobj.tags.all()
+    form = ReviewForm()
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.project = projectobj
+            review.owner = request.user.profile
+            review.save()
+            projectobj.get_vote_count
+
+            messages.success(request, "Your review was successfully submitted")
+            return redirect("project", pk=projectobj.id)
+
+        # update project
     context = {
         "obj": projectobj,
-        "tags": tag,
+        "form": form,
     }
 
     return render(request, "projects/single-project.html", context)
@@ -30,7 +50,7 @@ def createProject(request):
             project = form.save(commit=False)
             project.owner = request.user.profile
             project.save()
-            return redirect("projects")
+            return redirect("account")
     context = {"form": form}
     return render(request, "projects/project_form.html", context)
 
@@ -44,7 +64,7 @@ def updateProject(request, pk):
         form = ProjectForm(request.POST, request.FILES, instance=project)
         if form.is_valid():
             form.save()
-            return redirect("projects")
+            return redirect("account")
     context = {"form": form}
     return render(request, "projects/project_form.html", context)
 
@@ -57,4 +77,4 @@ def deleteProject(request, pk):
         project.delete()
         return redirect("projects")
     context = {"object": project}
-    return render(request, "projects/delete_template.html", context)
+    return render(request, "delete_template.html", context)
