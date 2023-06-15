@@ -10,7 +10,7 @@ class Project(models.Model):
         Profile,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
     )
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
@@ -32,6 +32,15 @@ class Project(models.Model):
     def __str__(self) -> str:
         return str(self.title)
 
+    @property
+    def image_url(self):
+        try:
+            url = self.featured_image.url
+        except:
+            url = ""
+        return url
+
+    @property
     def reviewers(self):
         queryset = self.review_set.all().values_list("owner__id", flat=True)
         return queryset

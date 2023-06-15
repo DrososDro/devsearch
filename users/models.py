@@ -35,6 +35,13 @@ class Profile(models.Model):
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
     )
 
+    def image_url(self):
+        try:
+            url = self.profile_image.url
+        except:
+            url = ""
+        return url
+
     def __str__(self):
         # return str(self.user.username)
         return self.name

@@ -37,9 +37,7 @@
                             <div class="dev">
                                 <a href="{% url 'user-profile' user.id %}" class="card__body">
                                     <div class="dev__profile">
-                                        <img class="avatar avatar--md"
-                                             src="{{ user.profile_image.url }}"
-                                             alt="image" />
+                                        <img class="avatar avatar--md" src="{{ user.image_url }}" alt="image" />
                                         <div class="dev__meta">
                                             <h3>{{ user.name }}</h3>
                                             <h5>{{ user.short_intro|slice:"60" }}</h5>
