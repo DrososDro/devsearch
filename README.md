@@ -1,5 +1,6 @@
 ***
 # DevSearch
-#### followed the tutorial of the Denis Ivy!
+#### followed the tutorial made by Denis Ivy!
 
-*and my first project*
+*  ***and my first project***
+*  ***first course on Udemy***
